@@ -1,0 +1,100 @@
+#Aula 6
+#14/03/2024
+#Teste Kolmogorv 
+#Versao Atualizada
+
+#Exemplo 1
+amostra <- sort(c(0.621, 0.503, 0.203, 0.477, 
+             0.710, 0.581, 0.3289, 0.480,
+             0.554,0.382)) #estatistica de ordem da amostra aleatória observada
+
+par(mar = c(4,4,0.5,0.5)) #configurar area grafica
+grid <- seq(0, 1, l = 100) #gride de valores
+plot(grid, punif(grid), type = "l",
+     ylim = c(0, 1), ylab = "", lwd = 2,
+     col = "red", xlab = "", main = "") #grafico da acumulada da uniforme (0,1)
+lines(ecdf(amostra), verticals = FALSE, do.points = TRUE) #grafico da distribuicao empirica
+
+
+Sx <- ecdf(amostra) #funcao de distribuicao empirica
+
+tab <- cbind("x_k" = amostra, 
+      "S(x_k)" = Sx(amostra),
+      "F(x_k)" = punif(amostra),
+      "|S(X_k) - F(x_k)|" = abs(Sx(amostra) - punif(amostra)),
+      "|S(x_{k-1}) - F(x_k)|" = c(NA,abs(punif(amostra)[2:10]-Sx(amostra)[1:9]))) #tabela com as distancias verticais  
+
+tab
+#T será o maximo entre |S(X_k) - F(x_k)| e |S(x_{k-1}) - F(x_k)|
+T = max(tab[,4], tab[,5], na.rm = TRUE); T
+
+
+## Usando a funcao ks.test
+
+ks.test(amostra, "punif")
+
+#Exercicio 1
+
+
+
+Fx <- function(x){
+if(x < 0) out <- 0
+else if(0 <= x & x < 10) out <- (x^2)/100
+  else out <- 1
+  
+out 
+} #funcao de distribuicao definida no exercicio
+
+amostra2 <- sort(c(1.7, 5.3, 7.6, 8.9, 9.0, 9.1, 9.3, 9.6, 9.9, 9.9))  ## estatistica de ordem da amostra aleatória observada
+
+
+par(mar = c(4,4,0.5,0.5), mfrow = c(2,1)) #configurar area grafica
+grid <- seq(0, 10, l = 100) #gride de valores
+plot(grid, mapply(Fx, grid), type = "l",
+     ylim = c(0, 1), ylab = "", lwd = 2,
+     col = "red", xlab = "", main = "") #grafico da acumulada da uniforme (0,1
+lines(ecdf(amostra2), verticals = FALSE, do.points = TRUE) #grafico da distribuicao empirica
+
+
+Sx2 <- ecdf(amostra2) #funcao de distribuicao empirica
+
+tab2 <- cbind("x_k" = amostra2, 
+             "S(x_k)" = Sx2(amostra2),
+             "F(x_k)" = mapply(Fx, amostra2),
+             "|S(X_k) - F(x_k)|" = abs(Sx2(amostra2) - mapply(Fx, amostra2)),
+             "|S(x_{k-1}) - F(x_k)|" = c(NA,abs(mapply(Fx, amostra2)[2:10]-Sx2(amostra2)[1:9]))) #tabela com as distancias verticais  
+
+tab2
+#T será o maximo entre |S(X_k) - F(x_k)| e |S(x_{k-1}) - F(x_k)|
+T = max(tab2[,4], tab2[,5], na.rm = TRUE); T
+
+
+#transformando os dados
+
+amostra3 <- amostra2/10
+
+Sx3 <- ecdf(amostra3) #funcao de distribuicao empirica
+
+par(mar = c(4,4,0.5,0.5)) #configurar area grafica
+grid <- seq(0, 1, l = 100) #gride de valores
+plot(grid, pbeta(grid, 2, 1), type = "l",
+     ylim = c(0, 1), ylab = "", lwd = 2,
+     col = "red", xlab = "", main = "") #grafico da acumulada da uniforme (0,1)
+lines(ecdf(amostra3), verticals = FALSE, do.points = TRUE) #grafico da distribuicao empirica
+
+
+tab3 <- cbind("x_k" = amostra3, 
+      "S(x_k)" = Sx3(amostra3),
+      "F(x_k)" = pbeta(amostra3, 2, 1),
+      "|S(X_k) - F(x_k)|" = abs(Sx3(amostra3) - pbeta(amostra3, 2, 1) ),
+      "|S(x_{k-1}) - F(x_k)|" = c(NA,abs(pbeta(amostra3, 2, 1)[2:10] - Sx3(amostra3)[1:9])))   #tabela com as distancias verticais 
+
+tab3
+#T será o maximo entre |S(X_k) - F(x_k)| e |S(x_{k-1}) - F(x_k)|
+T = max(tab3[,4], tab3[,5], na.rm = TRUE); T
+
+
+#Usando a funcao ks.test
+
+ks.test(amostra3, "pbeta", shape1 = 2, shape2 = 1)
+
