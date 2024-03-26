@@ -1,0 +1,64 @@
+######Francisca cíntia de Sousa Barros
+####Não paramétrica
+###########Aula 08#############
+
+dif <- function(x){
+  n <- length(x)
+  if (n %% 2 == 0) k <- n/2 else k <- (n-1)/2
+  d <- NULL
+  for(i in seq_len(k)){
+    d[i] <- x[n-i+1] - x[i]
+  }
+  d
+}
+n <- length(amostra);n
+D <- (n-1)*var(amostra);D
+tab <- cbind("ai" = ai, "di" = dif(amostra)); tab
+num <- (sum(tab[,1]*tab[,2]))^2
+W <- num/D; W
+valor_p <- approx(x = c(0.943,0.973), y = c(0.5, 0.9), xout = W)$y;valor_p
+amostra <- sort(c(65, 61, 63, 86, 70, 55, 74, 35, 72, 68, 45, 58))
+ai <- c(0.5475, 0.3325, 0.2347, 0.1586, 0.0922, 0.0303)
+                  
+shapiro.test(amostra)
+
+###########Aula 07##############
+amostra <- sort(c(23, 23, 24, 27, 29, 31, 32, 33, 33, 35,36, 37, 40, 42, 43, 43, 44, 45,
+                  48, 48, 54, 54, 56, 57, 57, 58, 58, 58, 58, 59, 61, 61, 62, 63, 64, 65, 66, 68, 68, 70, 73, 73, 74, 75, 77, 81, 87, 89,
+                  93, 97))
+                  
+Zi <- (amostra - mean(amostra))/sd(amostra)
+#estatistica de ordem da amostra aleatória observada
+Sx <- ecdf(Zi) #funcao de distribuicao empirica
+tab <- cbind("x_k" = Zi,
+       "S(x_k)" = Sx(Zi),
+       "F(x_k)" = pnorm(Zi),
+       "|S(X_k) - F(x_k)|" = abs(Sx(Zi) - pnorm(Zi)),
+       "|S(x_{k-1}) - F(x_k)|" = c(NA,abs(pnorm(Zi)[2:length(amostra)]- Sx(Zi)[1:(length(amostra)-1)]))) #tabela com as distancias verticais  
+  tab
+#T será o maximo entre |S(X_k) - F(x_k)| e |S(x_{k-1}) - F(x_k)|
+T1 = max(tab[,4], tab[,5], na.rm = TRUE); T1
+
+
+###############Aula 08 - exercício#############
+dif <- function(x){
+  n <- length(x)
+  if (n %% 2 == 0) k <- n/2 else k <- (n-1)/2
+  d <- NULL
+  for(i in seq_len(k)){
+    d[i] <- x[n-i+1] - x[i]
+  }
+  d
+}
+n <- length(amostra);n
+D <- (n-1)*var(amostra);D
+tab <- cbind("ai" = ai, "di" = dif(amostra)); tab
+num <- (sum(tab[,1]*tab[,2]))^2
+W <- num/D; W
+valor_p <- approx(x = c(0.920,0.959), y = c(0.1, 0.5), xout = W)$y;valor_p
+amostra <- sort(c(9.1,5.0, 7.3, 7.4, 5.5, 8.6, 7.0, 4.3, 4.7, 8.0, 4.0, 8.5, 6.4, 6.1,
+5.8, 9.5, 5.2, 6.7, 8.3, 9.2))
+ai <- c(0.4734, 0.3211, 0.2565, 0.2085, 0.1686, 0.1334, 0.1013, 0.0711, 0.0422, 0.0140)
+
+shapiro.test(amostra)
+
