@@ -41,6 +41,8 @@ T1 = max(tab[,4], tab[,5], na.rm = TRUE); T1
 
 
 ###############Aula 08 - exercício#############
+####Questão 01
+
 dif <- function(x){
   n <- length(x)
   if (n %% 2 == 0) k <- n/2 else k <- (n-1)/2
@@ -59,6 +61,27 @@ valor_p <- approx(x = c(0.920,0.959), y = c(0.1, 0.5), xout = W)$y;valor_p
 amostra <- sort(c(9.1,5.0, 7.3, 7.4, 5.5, 8.6, 7.0, 4.3, 4.7, 8.0, 4.0, 8.5, 6.4, 6.1,
 5.8, 9.5, 5.2, 6.7, 8.3, 9.2))
 ai <- c(0.4734, 0.3211, 0.2565, 0.2085, 0.1686, 0.1334, 0.1013, 0.0711, 0.0422, 0.0140)
+
+shapiro.test(amostra)
+####Questão 02
+dif <- function(x){
+  n <- length(x)
+  if (n %% 2 == 0) k <- n/2 else k <- (n-1)/2
+  d <- NULL
+  for(i in seq_len(k)){
+    d[i] <- x[n-i+1] - x[i]
+  }
+  d
+}
+n <- length(amostra);n
+D <- (n-1)*var(amostra);D
+tab <- cbind("ai" = ai, "di" = dif(amostra)); tab
+num <- (sum(tab[,1]*tab[,2]))^2
+W <- num/D; W
+
+valor_p <- approx(x = c(0.950,0.975), y = c(0.5, 0.9), xout = W)$y;valor_p
+amostra <- sort(c(481, 620, 642, 515, 740, 562, 395, 615, 596, 618, 525, 584, 540, 580, 598))
+ai <- c(0.5150, 0.3306, 0.2495, 0.1878, 0.1353, 0.0880, 0.0433)
 
 shapiro.test(amostra)
 
